@@ -95,22 +95,35 @@ function App() {
   const [fileUrl, setFileUrl] = useState('');
   const [options, setOptions] = useState<OPTION[]>(DEFAULT_OPTIONS);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+  const [downloadUrl, setDownloadUrl] = useState('');
 
   const selectedOption = options[selectedOptionIndex]
 
   useEffect(() => {
     if (null !== canvasRef.current) {
       const canvas = canvasRef.current
-      canvas.width = window.innerWidth * 2
-      canvas.height = window.innerHeight * 2
-      canvas.style.width = `${window.innerWidth - 5}px`
-      canvas.style.height = `${window.innerHeight - 5}px`
+      canvas.width = window.innerWidth 
+      canvas.height = window.innerHeight
 
       const context = canvas.getContext('2d')
       if (context !== null) {
         contextRef.current = context
       }
+      const filters = options.map(option => {
+        return `${option.property}(${option.value}${option.unit})`
+      })
+      if (contextRef.current) {
+        contextRef.current.filter = filters.join(' ')
+      }
 
+      let img = new Image();
+      img.src = fileUrl
+      img.onload = () => {
+        if (canvasRef.current && contextRef.current) {
+          const canvas = canvasRef.current
+          contextRef.current.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+      }
     }
   })
 
@@ -121,17 +134,9 @@ function App() {
       reader.onload = (ev: any) => {
         const src = ev.target.result
         setFileUrl(src)
-        let img = new Image();
-        img.src = src
-        img.onload = () => {
-          if(canvasRef.current && contextRef.current){
-            const canvas = canvasRef.current
-            contextRef.current.drawImage(img, 0, 0,canvas.width,canvas.height);
-          }
-        }
       }
-
       reader.readAsDataURL(fileSrc)
+      
     }
 
   }
@@ -143,13 +148,12 @@ function App() {
         return { ...option, value: e.target.value }
       })
     })
+    setDownloadUrl('')
   }
 
-  const getImageStyle = (): object => {
-    const filters = options.map(option => {
-      return `${option.property}(${option.value}${option.unit})`
-    })
-    return { filter: filters.join(' ') }
+  const downloadImg = () => {
+    if(canvasRef.current)
+    setDownloadUrl(canvasRef.current?.toDataURL('image/png'))
   }
 
   return (
@@ -158,13 +162,20 @@ function App() {
       {fileUrl
         ? <>
           <div className="main-image">
-            <canvas ref={canvasRef} />
+            <canvas className='canvas' ref={canvasRef} />
           </div>
           <div className="sidebar">
             {options.map((item, i) => (
               <SideBarItem key={`${item}_${i}`} active={i === selectedOptionIndex} name={item.name} handleClick={() => setSelectedOptionIndex(i)} />
             ))}
           </div>
+          
+          <button onClick={downloadImg}>Готово</button>
+          {downloadUrl 
+          ? <a href={downloadUrl} download>Download</a>
+          :''}
+
+          <button onClick={()=>setOptions(DEFAULT_OPTIONS)}>Сброс</button>
 
           <Slider
             min={selectedOption.range.min}

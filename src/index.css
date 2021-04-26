@@ -23,6 +23,14 @@ code {
 
 }
 
-.image{
-  max-width: 500px;
+.container{
+  max-width: 1130px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.canvas{
+  width: 100%;
+  height: auto;
+  margin: 30px 0px;
 }
