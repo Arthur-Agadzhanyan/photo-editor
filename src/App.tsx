@@ -102,8 +102,16 @@ function App() {
   useEffect(() => {
     if (null !== canvasRef.current) {
       const canvas = canvasRef.current
-      canvas.width = window.innerWidth 
-      canvas.height = window.innerHeight
+
+      let img = new Image();
+      img.src = fileUrl
+
+      img.onload = () => {       
+        if (canvasRef.current && contextRef.current) {
+          const canvas = canvasRef.current
+          contextRef.current.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+      }
 
       const context = canvas.getContext('2d')
       if (context !== null) {
@@ -116,14 +124,9 @@ function App() {
         contextRef.current.filter = filters.join(' ')
       }
 
-      let img = new Image();
-      img.src = fileUrl
-      img.onload = () => {
-        if (canvasRef.current && contextRef.current) {
-          const canvas = canvasRef.current
-          contextRef.current.drawImage(img, 0, 0, canvas.width, canvas.height);
-        }
-      }
+      
+      
+      
     }
   })
 
@@ -133,6 +136,16 @@ function App() {
       const reader = new FileReader()
       reader.onload = (ev: any) => {
         const src = ev.target.result
+        let img = new Image();
+        img.src = src
+
+        img.onload = () => {
+          if(canvasRef.current){
+            canvasRef.current.width = img.width
+            canvasRef.current.height = img.height
+          }       
+        }
+
         setFileUrl(src)
       }
       reader.readAsDataURL(fileSrc)
