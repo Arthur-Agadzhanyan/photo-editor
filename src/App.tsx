@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SideBarItem from './SideBarItem';
 import Slider from './Slider'
 
@@ -88,16 +88,31 @@ const DEFAULT_OPTIONS: OPTION[] = [
   }
 ]
 
-
-
 function App() {
-  const fileImage = React.useRef<HTMLImageElement>(null)
+  const canvasRef = React.useRef<HTMLCanvasElement>(null)
+  const contextRef = useRef<CanvasRenderingContext2D | null>(null)
+
   const [fileUrl, setFileUrl] = useState('');
   const [options, setOptions] = useState<OPTION[]>(DEFAULT_OPTIONS);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+
   const selectedOption = options[selectedOptionIndex]
-  console.log(selectedOption);
-  
+
+  useEffect(() => {
+    if (null !== canvasRef.current) {
+      const canvas = canvasRef.current
+      canvas.width = window.innerWidth * 2
+      canvas.height = window.innerHeight * 2
+      canvas.style.width = `${window.innerWidth - 5}px`
+      canvas.style.height = `${window.innerHeight - 5}px`
+
+      const context = canvas.getContext('2d')
+      if (context !== null) {
+        contextRef.current = context
+      }
+
+    }
+  })
 
   const onFileChange = (event: any) => {
     const fileSrc = event.target.files[0]
@@ -106,6 +121,14 @@ function App() {
       reader.onload = (ev: any) => {
         const src = ev.target.result
         setFileUrl(src)
+        let img = new Image();
+        img.src = src
+        img.onload = () => {
+          if(canvasRef.current && contextRef.current){
+            const canvas = canvasRef.current
+            contextRef.current.drawImage(img, 0, 0,canvas.width,canvas.height);
+          }
+        }
       }
 
       reader.readAsDataURL(fileSrc)
@@ -122,11 +145,11 @@ function App() {
     })
   }
 
-  const getImageStyle = ():object=>{
-    const filters = options.map(option=>{
+  const getImageStyle = (): object => {
+    const filters = options.map(option => {
       return `${option.property}(${option.value}${option.unit})`
     })
-    return {filter: filters.join(' ')}
+    return { filter: filters.join(' ') }
   }
 
   return (
@@ -135,8 +158,7 @@ function App() {
       {fileUrl
         ? <>
           <div className="main-image">
-            <img id='image' className={'image'} ref={fileImage} src={fileUrl} style={getImageStyle()}/>
-
+            <canvas ref={canvasRef} />
           </div>
           <div className="sidebar">
             {options.map((item, i) => (
