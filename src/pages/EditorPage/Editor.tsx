@@ -168,32 +168,38 @@ function App() {
   return (
     <>
       {fileUrl
-        ? <div className='container'>
-          <div className="main-image">
-            <canvas className='canvas' ref={canvasRef} />
-          </div>
+        ? <div className='editor-container'>
+          <header className='header'>
+            Photify
+          </header>
           <div className="sidebar">
             {options.map((item, i) => (
               <SideBarItem key={`${item}_${i}`} active={i === selectedOptionIndex} name={item.name} handleClick={() => setSelectedOptionIndex(i)} />
             ))}
           </div>
 
-          <button onClick={downloadImg}>Готово</button>
-          {downloadUrl
-            ? <a href={downloadUrl} download>Download</a>
-            : ''}
+          <div className="editor-image">
+            <canvas className='canvas' ref={canvasRef} />
+          </div>
 
-          <button onClick={() => setOptions(DEFAULT_OPTIONS)}>Сброс</button>
+          <div className="rightbar">
+            <button onClick={downloadImg}>Готово</button>
+            {downloadUrl
+              ? <a href={downloadUrl} download>Download</a>
+              : ''}
 
+            <button onClick={() => setOptions(DEFAULT_OPTIONS)}>Сброс</button>
+          </div>
+
+          
           <Slider
             min={selectedOption.range.min}
             max={selectedOption.range.max}
             value={selectedOption.value}
             handleChange={handleSliderChange}
           />
-          <br />
         </div>
-        : <input type='file' accept='.png, .jpg, .jpeg, .gif' name='img' onChange={onFileChange} className={`fileInput`} />       
+        : <input type='file' accept='.png, .jpg, .jpeg, .gif' name='img' onChange={onFileChange} className={`fileInput`} />
       }
     </>
   );

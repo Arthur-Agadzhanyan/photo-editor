@@ -8,7 +8,7 @@ interface Propertyes {
 
 const SideBarItem: FC<Propertyes> = ({name,active,handleClick}) => {
     return (
-        <button className='sidebar-item' style={{background: active ? "pink" : 'transparent'}} onClick={handleClick}> {name} </button>
+        <button className='sidebar-item' style={{background: active ? "#fff" : 'transparent',color: active ? "#2b2c2f" : '#fff'}} onClick={handleClick}> {name} </button>
     );
 }
 
