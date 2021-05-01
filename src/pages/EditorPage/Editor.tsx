@@ -15,6 +15,13 @@ interface OPTION {
   unit: string
 }
 
+const selectImgStyle = {
+  background: `url(https://i.pinimg.com/originals/1d/09/c4/1d09c4fb39f4ada83fc427e2df8cf8c5.png)`,
+  backgroundPosition: 'center',
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat'
+}
+
 const DEFAULT_OPTIONS: OPTION[] = [
   {
     name: 'Brightness',
@@ -91,12 +98,13 @@ const DEFAULT_OPTIONS: OPTION[] = [
 function App() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   const contextRef = useRef<CanvasRenderingContext2D | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [fileUrl, setFileUrl] = useState('');
   const [options, setOptions] = useState<OPTION[]>(DEFAULT_OPTIONS);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const [downloadUrl, setDownloadUrl] = useState('');
-  const [downloadInputValue,setDownloadInputValue] = useState('')
+  const [downloadInputValue, setDownloadInputValue] = useState('')
 
   const selectedOption = options[selectedOptionIndex]
 
@@ -152,9 +160,14 @@ function App() {
 
   }
 
-  const submitPhoto = (e: React.FormEvent)=>{
+  const submitPhoto = (e: React.FormEvent) => {
     e.preventDefault()
-    setFileUrl(downloadInputValue)
+    if(downloadInputValue.trim().length == 0){
+      alert('Should not consist of only spaces')
+    }
+    if(downloadInputValue.substr(0,8) == 'https://' || downloadInputValue.substr(0,7) == 'http://'){
+      setFileUrl(downloadInputValue)
+    }
   }
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,7 +185,7 @@ function App() {
       setDownloadUrl(canvasRef.current?.toDataURL('image/png'))
   }
 
-  
+
 
   return (
     <>
@@ -216,13 +229,22 @@ function App() {
             handleChange={handleSliderChange}
           />
         </div>
-        : <div>
-          <h2>Select a local image or paste its url</h2>
-          <form onSubmit={submitPhoto}>
-              <input type="text" value={downloadInputValue} onChange={(e)=>setDownloadInputValue(e.target.value)}/>
-              <button type='submit'>Submit</button>
-          </form>
-            <input type='file' accept='.png, .jpg, .jpeg, .gif' name='img' onChange={onFileChange} className={`fileInput`} />
+        : <div className='select' style={selectImgStyle}>
+          <div className='select__container'>
+            <h2 className='select__title'>Select a local image or paste its url</h2>
+            <div className="select__buttons">              
+              <form className="button__block" onSubmit={submitPhoto}>
+                <h2 className="block__title">Url</h2>
+                <input className="block__input" type="text" value={downloadInputValue} onChange={(e) => setDownloadInputValue(e.target.value)} />
+              </form>
+
+              <div className="button__block">
+                <h2 className="block__title">Local</h2>
+                <input type='file' ref={fileInputRef} accept='.png, .jpg, .jpeg, .gif' name='img' onChange={onFileChange} className={`fileInput`} />
+                <button className='block__btn btn-local' onClick={()=>fileInputRef.current?.click()}>Choose file</button>
+              </div>
+            </div>
+          </div>
         </div>
       }
     </>
