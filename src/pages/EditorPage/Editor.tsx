@@ -96,6 +96,7 @@ function App() {
   const [options, setOptions] = useState<OPTION[]>(DEFAULT_OPTIONS);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const [downloadUrl, setDownloadUrl] = useState('');
+  const [downloadInputValue,setDownloadInputValue] = useState('')
 
   const selectedOption = options[selectedOptionIndex]
 
@@ -104,6 +105,7 @@ function App() {
       const canvas = canvasRef.current
 
       let img = new Image();
+      img.crossOrigin = 'anonymous'
       img.src = fileUrl
 
       img.onload = () => {
@@ -150,6 +152,11 @@ function App() {
 
   }
 
+  const submitPhoto = (e: React.FormEvent)=>{
+    e.preventDefault()
+    setFileUrl(downloadInputValue)
+  }
+
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOptions((prev): any => {
       return prev.map((option, index) => {
@@ -165,13 +172,15 @@ function App() {
       setDownloadUrl(canvasRef.current?.toDataURL('image/png'))
   }
 
+  
+
   return (
     <>
       {fileUrl
         ? <div className='editor-container'>
-          <header className='header'>
+          {/* <header className='header'>
             Photify
-          </header>
+          </header> */}
           <div className="sidebar">
             {options.map((item, i) => (
               <SideBarItem key={`${item}_${i}`} active={i === selectedOptionIndex} name={item.name} handleClick={() => setSelectedOptionIndex(i)} />
@@ -183,15 +192,23 @@ function App() {
           </div>
 
           <div className="rightbar">
-            <button onClick={downloadImg}>Готово</button>
+            <button onClick={downloadImg}>Done</button>
             {downloadUrl
-              ? <a href={downloadUrl} download>Download</a>
+              ? <div className='download'>
+                <div className='overlay' onClick={() => setDownloadUrl('')}></div>
+                <div className="modal">
+                  <h1 className='modal__title'>Photify</h1>
+                  <p className='modal__text'>Download your edited image!</p>
+                  <a href={downloadUrl} download><button className='download_link'>Download</button></a>
+                </div>
+              </div>
               : ''}
 
-            <button onClick={() => setOptions(DEFAULT_OPTIONS)}>Сброс</button>
+            <button onClick={() => setOptions(DEFAULT_OPTIONS)}>Reset</button>
+            {/* <input type='file' accept='.png, .jpg, .jpeg, .gif' name='img' onChange={onFileChange} className={`fileInput`} /> */}
           </div>
 
-          
+
           <Slider
             min={selectedOption.range.min}
             max={selectedOption.range.max}
@@ -199,7 +216,14 @@ function App() {
             handleChange={handleSliderChange}
           />
         </div>
-        : <input type='file' accept='.png, .jpg, .jpeg, .gif' name='img' onChange={onFileChange} className={`fileInput`} />
+        : <div>
+          <h2>Select a local image or paste its url</h2>
+          <form onSubmit={submitPhoto}>
+              <input type="text" value={downloadInputValue} onChange={(e)=>setDownloadInputValue(e.target.value)}/>
+              <button type='submit'>Submit</button>
+          </form>
+            <input type='file' accept='.png, .jpg, .jpeg, .gif' name='img' onChange={onFileChange} className={`fileInput`} />
+        </div>
       }
     </>
   );
