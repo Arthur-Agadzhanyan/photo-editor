@@ -162,10 +162,10 @@ function App() {
 
   const submitPhoto = (e: React.FormEvent) => {
     e.preventDefault()
-    if(downloadInputValue.trim().length == 0){
+    if(downloadInputValue.trim().length === 0){
       alert('Should not consist of only spaces')
     }
-    if(downloadInputValue.substr(0,8) == 'https://' || downloadInputValue.substr(0,7) == 'http://'){
+    if(downloadInputValue.substr(0,8) === 'https://' || downloadInputValue.substr(0,7) === 'http://'){
       setFileUrl(downloadInputValue)
     }
   }
