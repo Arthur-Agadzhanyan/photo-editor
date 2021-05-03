@@ -49,6 +49,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  background:#eee;;
 }
 
 code {
@@ -123,6 +124,7 @@ input[type=file]{
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   color:#fff;
 
   &__title{
@@ -156,11 +158,11 @@ input[type=file]{
       }
       .btn-local{
         color: #fff;
-        border: 1px solid #fff;
-        background: #170420;
+        border: none;
+        background: #c61340;
+        box-shadow: 0px 0px 16px #c61340;
         &:hover{
-          border: 1px solid #170420;
-          color: #170420;
+          color: #c61340;
           background: #fff;
         }
       }
@@ -172,9 +174,10 @@ input[type=file]{
   }
 @media (max-width: 512px) {
   &__title{
-    font-size: 2.7em;
+    font-size: 2.6em;
     text-align: center;
     margin-bottom: 30px;
+    padding: 0px 10px;
   }
 }
   
@@ -184,7 +187,6 @@ input[type=file]{
   @include opacityAnim;
   display: grid;  
   height: 100vh;
-  background: #eee;
   grid-template-areas:"sidebar image rightbar"  
                        "sidebar image rightbar" 
                        "sidebar slider rightbar";
@@ -198,6 +200,7 @@ input[type=file]{
   flex-direction: column;
   background: #262624;
   margin-right: 20px;
+  overflow-y: auto;
 
   .sidebar-item{
     color:#fff;
@@ -207,6 +210,23 @@ input[type=file]{
     cursor: pointer;
     margin: 10px 0px;
   }
+}
+
+.overlay{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+}
+
+.mobile_sidebar{
+  position: fixed;
+  display: none;
+  height: 100vh;
+  transition: all .2s linear;
+  width: 230px;
 }
 
 .editor-image{
@@ -223,16 +243,16 @@ input[type=file]{
   }
 }
 
-// .header{
-//   grid-area: header;
-//   font-size: 1.8em;
-//   background: #000;
-//   color: #fff;
-//   text-align: center;
-//   display: flex;
-//   align-items: center;
-//   padding-left: 30px;
-// }
+.mobile{
+  display: none;
+  grid-area: header;
+  font-size: 1.8em;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  align-items: center;
+  padding-left: 30px;
+}
 
 .rightbar{
   grid-area: rightbar;
@@ -311,5 +331,51 @@ input[type=file]{
   grid-area: slider;
   input{
     width: 100%;
+  }
+}
+
+
+@media (max-width: 1018px) {
+  .mobile{
+    display: flex;
+    padding: 10px 20px;
+    .fas{
+      font-size: 21px;
+    }
+    p{
+      margin-left: 10px;
+    }
+  }
+  .editor-container{
+    @include opacityAnim;
+    display: grid;  
+    height: 100vh;
+    grid-template-areas:"header header"  
+                         "image image" 
+                         "slider slider"
+                         "rightbar rightbar";
+    grid-template-columns: 6fr 1fr;
+    // grid-template-rows: 8fr 1fr;
+  }
+
+  .rightbar{
+    margin: 0px;
+    padding: 10px;
+    background: #eee;
+  }
+  .slider-container{
+    p{
+      padding: 10px;
+    }
+  }
+  .editor-image{
+    margin: 0px 20px;
+    padding: 30px 0px;
+  }
+  .sidebar{
+    display: none;
+  }
+  .mobile_sidebar{
+    display: flex;
   }
 }

@@ -105,6 +105,7 @@ function App() {
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const [downloadUrl, setDownloadUrl] = useState('');
   const [downloadInputValue, setDownloadInputValue] = useState('')
+  const [mobileMenuVisible,setMobileMenuVisible] = useState(false)
 
   const selectedOption = options[selectedOptionIndex]
 
@@ -185,16 +186,27 @@ function App() {
       setDownloadUrl(canvasRef.current?.toDataURL('image/png'))
   }
 
-
+  const mobileHandleClick = (i:number)=>{
+    setMobileMenuVisible(!mobileMenuVisible)
+    setSelectedOptionIndex(i)
+  }
 
   return (
     <>
       {fileUrl
         ? <div className='editor-container'>
-          {/* <header className='header'>
-            Photify
-          </header> */}
-          <div className="sidebar">
+          <nav className='mobile'>
+            <i className="fas fa-bars" onClick={()=>setMobileMenuVisible(!mobileMenuVisible)}></i>
+            <p>Photify</p>   
+          </nav>
+          <div className='overlay' style={{display: mobileMenuVisible ? 'block' : 'none'}} onClick={()=>setMobileMenuVisible(!mobileMenuVisible)}></div>
+          <div className="sidebar mobile_sidebar" style={{marginLeft: mobileMenuVisible ? '0px' : '-300px'}}>  
+            {options.map((item, i) => (
+              <SideBarItem key={`${item}_${i}`} active={i === selectedOptionIndex} name={item.name} handleClick={()=>mobileHandleClick(i)} />
+            ))}
+          </div>
+
+          <div className="sidebar"> 
             {options.map((item, i) => (
               <SideBarItem key={`${item}_${i}`} active={i === selectedOptionIndex} name={item.name} handleClick={() => setSelectedOptionIndex(i)} />
             ))}
