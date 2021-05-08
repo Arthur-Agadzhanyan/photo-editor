@@ -119,6 +119,7 @@ input[type=file]{
 }
 
 .select{
+  box-sizing: border-box;
   min-height: 100vh;
   padding-top: 60px;
   display: flex;
@@ -168,13 +169,22 @@ input[type=file]{
       }
     }
 
-    @media (max-width: 512px) {
+    @media (max-width: 633px) {
       display: block;
     }
   }
 @media (max-width: 512px) {
+  &__buttons{
+    .button__block{
+      .block__input{
+        width: 90%;
+      }
+    }
+    
+  }
+  
   &__title{
-    font-size: 2.6em;
+    font-size: 2.5em;
     text-align: center;
     margin-bottom: 30px;
     padding: 0px 10px;
