@@ -44,4 +44,5 @@ export interface RightBarProp{
     downloadUrl: string
     setDownloadUrl(url:string):void
     setOptions(option:OPTION[]):void 
+    setFileUrl(src: string):void
 }

@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { SidebarProp } from '../interfaces';
 import SideBarItem from './SideBarItem';
 
-// () => setSelectedOptionIndex(i)
 const Sidebar: FC<SidebarProp> = ({options, selectedOptionIndex, handleClick}) => {
     return (
         <div className="sidebar">

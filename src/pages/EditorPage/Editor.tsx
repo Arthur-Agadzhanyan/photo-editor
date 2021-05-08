@@ -37,7 +37,7 @@ function App() {
 
           <EditorImage options={options} fileUrl={fileUrl} canvasRef={canvasRef} contextRef={contextRef}/>
 
-          <RightBar canvasRef={canvasRef} DEFAULT_OPTIONS={DEFAULT_OPTIONS} downloadUrl={downloadUrl} setDownloadUrl={setDownloadUrl} setOptions={setOptions}/>
+          <RightBar canvasRef={canvasRef} DEFAULT_OPTIONS={DEFAULT_OPTIONS} downloadUrl={downloadUrl} setDownloadUrl={setDownloadUrl} setOptions={setOptions} setFileUrl={setFileUrl}/>
 
           <Slider
             min={selectedOption.range.min}

@@ -4,7 +4,6 @@ import SideBarItem from './SideBarItem';
 
 const MobileSidebar: FC<SidebarProp> = ({ options, selectedOptionIndex, handleClick }) => {
     const [mobileMenuVisible, setMobileMenuVisible] = useState(false)
-    //() => mobileHandleClick(i)
 
     const mobileHandleClick = (i: number) => {
         setMobileMenuVisible(!mobileMenuVisible)
