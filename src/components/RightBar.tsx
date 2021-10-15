@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { FC } from 'react';
 import { RightBarProp } from '../interfaces';
 
-const RightBar: FC<RightBarProp> = ({canvasRef,DEFAULT_OPTIONS,downloadUrl,setDownloadUrl,setOptions,setFileUrl}) => {
+const RightBar: FC<RightBarProp> = ({canvasRef,DEFAULT_OPTIONS,downloadUrl,setDownloadUrl,setOptions,setFileUrl,setImgParams,setInitialImgParams,initialImgParams}) => {
     const downloadImg = () => {
         if (canvasRef.current)
           setDownloadUrl(canvasRef.current?.toDataURL('image/png'))
@@ -23,6 +23,9 @@ const RightBar: FC<RightBarProp> = ({canvasRef,DEFAULT_OPTIONS,downloadUrl,setDo
               if (canvasRef.current) {
                 canvasRef.current.width = img.width
                 canvasRef.current.height = img.height
+
+                setImgParams({width:img.width,height:img.height})
+                setInitialImgParams({width:img.width,height:img.height})
               }
             }
     
@@ -30,6 +33,14 @@ const RightBar: FC<RightBarProp> = ({canvasRef,DEFAULT_OPTIONS,downloadUrl,setDo
           }
           reader.readAsDataURL(fileSrc)
         }
+      }
+
+      const resetChanges = ()=>{
+        setOptions(DEFAULT_OPTIONS)
+        // setImgParams(initialImgParams)
+
+        // canvasRef.current!.width = initialImgParams.width
+        // canvasRef.current!.height = initialImgParams.height
       }
 
     return (
@@ -49,7 +60,7 @@ const RightBar: FC<RightBarProp> = ({canvasRef,DEFAULT_OPTIONS,downloadUrl,setDo
                 </div>
                 : ''}
 
-            <button onClick={() => setOptions(DEFAULT_OPTIONS)}>Reset</button>
+            <button onClick={resetChanges}>Reset</button>
             {/* <input type='file' accept='.png, .jpg, .jpeg, .gif' name='img' onChange={onFileChange} className={`fileInput`} /> */}
         </div>
     );

@@ -17,6 +17,9 @@ export interface SidebarProp {
     options: OPTION[]
     selectedOptionIndex: number
     handleClick(i:number): void
+    setImgParams(params:imgParamsTs): void
+    imgParams: imgParamsTs,
+    canvasRef: React.RefObject<HTMLCanvasElement>
 }
 
 export interface SliderProp{
@@ -33,9 +36,15 @@ export interface EditorImageProp{
     contextRef: any
 }
 
+export interface imgParamsTs{
+    width:number,height:number
+}
+
 export interface SelectImagePageProp{
     canvasRef: React.RefObject<HTMLCanvasElement>
-    setFileUrl(src: string):void
+    setFileUrl(src: string):void,
+    setImgParams(src:imgParamsTs):void
+    setInitialImgParams(src:imgParamsTs):void
 }
 
 export interface RightBarProp{
@@ -45,4 +54,9 @@ export interface RightBarProp{
     setDownloadUrl(url:string):void
     setOptions(option:OPTION[]):void 
     setFileUrl(src: string):void
+    setImgParams(src:imgParamsTs): void
+    
+    initialImgParams: imgParamsTs
+    setInitialImgParams(src:imgParamsTs):void
+
 }

@@ -9,7 +9,7 @@ const selectImgStyle = {
     backgroundRepeat: 'no-repeat'
 }
 
-const SelectImagePage: FC<SelectImagePageProp> = ({canvasRef,setFileUrl}) => {
+const SelectImagePage: FC<SelectImagePageProp> = ({canvasRef,setFileUrl,setImgParams,setInitialImgParams}) => {
     
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [downloadInputValue, setDownloadInputValue] = useState('')
@@ -27,12 +27,17 @@ const SelectImagePage: FC<SelectImagePageProp> = ({canvasRef,setFileUrl}) => {
               if (canvasRef.current) {
                 canvasRef.current.width = img.width
                 canvasRef.current.height = img.height
+
+                setImgParams({width:img.width,height:img.height})
+                setInitialImgParams({width:img.width,height:img.height})
               }
             }
     
             setFileUrl(src)
           }
-          reader.readAsDataURL(fileSrc)
+
+        
+        reader.readAsDataURL(fileSrc)
         }
       }
 
