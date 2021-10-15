@@ -37,10 +37,10 @@ const RightBar: FC<RightBarProp> = ({canvasRef,DEFAULT_OPTIONS,downloadUrl,setDo
 
       const resetChanges = ()=>{
         setOptions(DEFAULT_OPTIONS)
-        // setImgParams(initialImgParams)
+        setImgParams(initialImgParams)
 
-        // canvasRef.current!.width = initialImgParams.width
-        // canvasRef.current!.height = initialImgParams.height
+        canvasRef.current!.width = initialImgParams.width
+        canvasRef.current!.height = initialImgParams.height
       }
 
     return (
